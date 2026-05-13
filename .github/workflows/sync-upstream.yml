@@ -1,0 +1,32 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    # 每天 UTC 00:00 檢查一次上游更新
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/anthropics/claude-for-legal.git
+          git fetch upstream
+
+      - name: Merge upstream
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # 嘗試合併上游 main 分支，如果有衝突則需要手動處理
+          # 這裡使用 --allow-unrelated-histories 是因為我們是手動建立的 repo 而非 fork
+          git merge upstream/main --allow-unrelated-histories -m "chore(sync): merge upstream changes" || echo "Merge conflict detected, manual intervention required."
+          
+      - name: Push changes
+        run: git push origin main
