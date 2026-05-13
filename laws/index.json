@@ -3,7 +3,7 @@
   "laws": [
     {
       "id": "civil-code",
-      "pcode": "N0030001",
+      "pcode": "B0000001",
       "name": "台灣民法",
       "files": {
         "markdown": "civil-code/articles.md",

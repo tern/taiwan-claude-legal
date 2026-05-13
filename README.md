@@ -1,5 +1,7 @@
 # Taiwan Claude Legal 🇹🇼⚖️
 
+![Version](https://img.shields.io/badge/version-v1.0.0-blue)
+
 > **來源說明**：本專案是基於 [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal) 的架構進行台灣本地化擴充與自動化改進。
 
 這是一個專為 [Claude for Legal](https://github.com/anthropics/claude-for-legal) 設計的擴充知識庫與 Playbook 專案，旨在讓 Claude 能夠完美理解並應用台灣《民法》及其他核心法規。
