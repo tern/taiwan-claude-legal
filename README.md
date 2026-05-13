@@ -2,7 +2,7 @@
 
 > **來源說明**：本專案是基於 [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal) 的架構進行台灣本地化擴充與自動化改進。
 
-這是一個專為 [Claude for Legal](https://anthropic.com) 設計的擴充知識庫與 Playbook 專案，旨在讓 Claude 能夠完美理解並應用台灣《民法》及其他核心法規。本專案內建自動化更新機制，每日自動同步法務部最新條文。
+這是一個專為 [Claude for Legal](https://github.com/anthropics/claude-for-legal) 設計的擴充知識庫與 Playbook 專案，旨在讓 Claude 能夠完美理解並應用台灣《民法》及其他核心法規。本專案內建自動化更新機制，每日自動同步法務部最新條文。
 
 ## 專案特色
 - **自動化更新**：每日同步法務部全國法規資料庫 Open API，確保法規為最新狀態。
