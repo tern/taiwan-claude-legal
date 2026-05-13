@@ -10,27 +10,30 @@ from bs4 import BeautifulSoup
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # === 設定 ===
-# 修正：PCODE 應為 B0000001 (民法)，原 N0030001 為勞基法
-PCODE_CIVIL = "B0000001"
-LAW_NAME = "台灣民法"
-LAWS_DIR = os.path.join("laws", "civil-code")
-CHANGELOG_FILE = os.path.join("laws", "changelog.md")
-HTML_URL = f"https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode={PCODE_CIVIL}"
+LAWS_TO_TRACK = [
+    {"pcode": "B0000001", "name": "台灣民法", "dir": "civil-code"},
+    {"pcode": "J0080001", "name": "台灣公司法", "dir": "company-act"},
+    {"pcode": "N0030001", "name": "台灣勞動基準法", "dir": "labor-standards-act"}
+]
 
-def fetch_law_html():
+LAWS_ROOT_DIR = "laws"
+CHANGELOG_FILE = os.path.join(LAWS_ROOT_DIR, "changelog.md")
+
+def fetch_law_html(pcode):
+    url = f"https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode={pcode}"
     headers = {"User-Agent": "Mozilla/5.0 (compatible; TaiwanClaudeLegalBot/1.0)"}
     for attempt in range(3):
         try:
             # 加入 verify=False 以應對法務部網站憑證問題
-            r = requests.get(HTML_URL, headers=headers, timeout=15, verify=False)
+            r = requests.get(url, headers=headers, timeout=15, verify=False)
             r.raise_for_status()
             return r.text
         except Exception as e:
-            print(f"Fetch failed (attempt {attempt+1}): {e}")
+            print(f"Fetch failed for {pcode} (attempt {attempt+1}): {e}")
             time.sleep(2)
-    raise Exception("無法取得民法網頁")
+    raise Exception(f"無法取得法規網頁: {pcode}")
 
-def parse_civil_code(html):
+def parse_law_html(html):
     soup = BeautifulSoup(html, "html.parser")
     articles = []
     current_chapter = ""
@@ -47,7 +50,6 @@ def parse_civil_code(html):
             continue
         
         # 1. 處理章節標題 (編/章/節/款)
-        # 章節通常在 div.line-0, line-1 等，或包含特定 class
         is_chapter = "line-" in elem.get("class", []) or any(x in text for x in ["編", "章", "節", "款"])
         if is_chapter and "第" in text and "條" not in text and len(text) < 100:
             current_chapter = text
@@ -70,7 +72,7 @@ def parse_civil_code(html):
                         "chapter": current_chapter
                     })
     
-    # 3. 如果上述結構抓不到（例如頁面結構變動），嘗試備用匹配
+    # 3. 備用匹配
     if not articles:
         for elem in soup.find_all(["div", "p"]):
             text = elem.get_text(strip=True)
@@ -85,7 +87,7 @@ def parse_civil_code(html):
                         "chapter": current_chapter
                     })
 
-    # 去重處理 (按條號)
+    # 去重
     seen_nos = set()
     unique_articles = []
     for art in articles:
@@ -95,33 +97,36 @@ def parse_civil_code(html):
 
     return unique_articles
 
-def main():
-    os.makedirs(LAWS_DIR, exist_ok=True)
-    print(f"🚀 正在從法務部抓取最新民法條文 (PCode: {PCODE_CIVIL})...")
+def update_law(law_info):
+    pcode = law_info["pcode"]
+    name = law_info["name"]
+    target_dir = os.path.join(LAWS_ROOT_DIR, law_info["dir"])
+    os.makedirs(target_dir, exist_ok=True)
+
+    print(f"🚀 正在抓取: {name} (PCode: {pcode})...")
 
     try:
-        html = fetch_law_html()
-        articles = parse_civil_code(html)
+        html = fetch_law_html(pcode)
+        articles = parse_law_html(html)
     except Exception as e:
-        print(f"❌ 錯誤: {e}")
-        return
+        print(f"❌ 錯誤 ({name}): {e}")
+        return False
 
-    if len(articles) < 10:  # 防呆
-        print("⚠️ 解析條文過少，使用 fallback")
-        articles = [{"article_no": "第 1 條", "content": "民事，法律所未規定者，依習慣；無習慣者，依法理。", "chapter": ""}]
+    if len(articles) < 5:
+        print(f"⚠️ {name} 解析條文過少，跳過更新")
+        return False
 
     full_json = {
-        "law_name": LAW_NAME,
-        "pcode": PCODE_CIVIL,
+        "law_name": name,
+        "pcode": pcode,
         "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "total_articles": len(articles),
         "articles": articles
     }
 
-    json_path = os.path.join(LAWS_DIR, "full.json")
-    md_path = os.path.join(LAWS_DIR, "articles.md")
+    json_path = os.path.join(target_dir, "full.json")
+    md_path = os.path.join(target_dir, "articles.md")
 
-    # 變動檢測
     changed = True
     if os.path.exists(json_path):
         try:
@@ -136,8 +141,7 @@ def main():
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(full_json, f, ensure_ascii=False, indent=2)
         
-        # 產生易讀 Markdown
-        md_content = f"# {LAW_NAME}（最新更新：{full_json['last_updated']}）\n\n"
+        md_content = f"# {name}（最新更新：{full_json['last_updated']}）\n\n"
         current_ch = ""
         for art in articles:
             if art["chapter"] and art["chapter"] != current_ch:
@@ -147,10 +151,25 @@ def main():
         
         with open(md_path, "w", encoding="utf-8") as f:
             f.write(md_content)
+        
+        print(f"✅ {name} 更新完成！共 {len(articles)} 條")
+        return True
+    else:
+        print(f"✅ {name} 無變動")
+        return False
 
-        # 更新 changelog
+def main():
+    os.makedirs(LAWS_ROOT_DIR, exist_ok=True)
+    updated_laws = []
+
+    for law in LAWS_TO_TRACK:
+        if update_law(law):
+            updated_laws.append(law["name"])
+        time.sleep(1) # 友善爬蟲
+
+    if updated_laws:
         date_str = datetime.now().strftime("%Y-%m-%d")
-        entry = f"- **{date_str}**：民法條文已自動更新（共 {len(articles)} 條）\n"
+        entry = f"- **{date_str}**：已自動更新法規：{', '.join(updated_laws)}\n"
         
         old_log = "# 更新日誌\n\n"
         if os.path.exists(CHANGELOG_FILE):
@@ -166,10 +185,6 @@ def main():
                 f.write(old_log + entry)
             else:
                 f.write(old_log)
-        
-        print(f"✅ 更新完成！共 {len(articles)} 條民法條文")
-    else:
-        print("✅ 無變動，跳過更新")
 
 if __name__ == "__main__":
     main()
