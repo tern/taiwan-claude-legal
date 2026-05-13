@@ -2,39 +2,41 @@
 
 > **來源說明**：本專案是基於 [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal) 的架構進行台灣本地化擴充與自動化改進。
 
-這是一個專為 [Claude for Legal](https://github.com/anthropics/claude-for-legal) 設計的擴充知識庫與 Playbook 專案，旨在讓 Claude 能夠完美理解並應用台灣《民法》及其他核心法規。本專案內建自動化更新機制，每日自動同步法務部最新條文。
+這是一個專為 [Claude for Legal](https://github.com/anthropics/claude-for-legal) 設計的擴充知識庫與 Playbook 專案，旨在讓 Claude 能夠完美理解並應用台灣《民法》及其他核心法規。
 
 ## 專案特色
-- **自動化更新**：每日同步法務部全國法規資料庫 Open API，確保法規為最新狀態。
-- **Claude for Legal 專屬格式**：條文自動轉換為 Claude 易於檢索的 Markdown 與結構化 JSON。
-- **專業 Playbook**：內建針對台灣法律實務的提示詞（如合約審查、NDA、風險評估）。
+- **HTML 穩定抓取**：使用 BeautifulSoup 解析法務部網頁，比 API 更有保障。
+- **每日自動同步**：透過 GitHub Actions 每日自動檢查最新修法。
+- **繁體中文優化**：所有條文、提示詞與回覆均採用台灣法律慣用語。
+- **即時知識庫**：條文自動轉換為 Claude 易於檢索的 Markdown 結構。
 
 ## 快速安裝 (60 秒教學)
 
-若您已經具備 Claude 的 CLI 或外掛環境，可直接將此 repo 作為 knowledge plugin 載入：
+請確保您已安裝 [Claude CLI](https://github.com/anthropics/claude-code)。
 
-1. 複製本專案：
+1. **複製專案到本地**：
    ```bash
    git clone https://github.com/tern/taiwan-claude-legal.git
    cd taiwan-claude-legal
    ```
-2. 將其加入 Claude Plugins（指令依您的 Claude 環境而定）：
+
+2. **將專案加入為 Claude 插件**：
    ```bash
-   claude plugins add ./taiwan-claude-legal
+   claude plugins add .
    ```
 
-## 如何在 Claude 內使用台灣民法技能
+## 如何使用
 
-載入 Playbook 後，您可以在對話中直接引用特定的情境：
+載入後，您可以在對話中直接使用：
 
-- **合約審查**：`@playbook taiwan-civil-code "請幫我審查這份僱傭合約，並列出違反台灣民法的風險。"`
-- **NDA 起草**：`@playbook taiwan-civil-code "請根據台灣法律起草一份單向保密協議。"`
+- **合約風險分析**：`@playbook taiwan-civil-code "請分析這份合約中關於違約金的條款是否合理？"`
+- **法規諮詢**：`"依據台灣民法，口頭合約是否有效？"`
+- **文件草擬**：`@playbook taiwan-civil-code "請幫我草擬一份符合台灣法律的簡易借貸協議。"`
 
-## 自動更新機制說明
-本專案包含一組 GitHub Actions Workflow (`.github/workflows/update-laws.yml`)。
-它會每天在 UTC 06:00 (台灣時間下午 2:00) 執行 `scripts/update_laws.py`。
-該腳本會抓取法務部 Open API 的資料，比對 `laws/civil-code/full.json`，如果發現修法，會自動 Commit 變更並產生 Changelog。
+## 自動更新機制
+本專案透過 `.github/workflows/update-laws.yml` 進行排程更新：
+- **時間**：每日台灣時間 14:00 (UTC 06:00)。
+- **邏輯**：抓取 [法務部全國法規資料庫](https://law.moj.gov.tw/)，若有更新則自動產出新的 `full.json` 與 `articles.md` 並 commit 回 repo。
 
 ## 免責聲明 ⚠️
-本專案提供之法規資料與 Claude AI 的分析結果 **僅供參考，不構成正式的法律意見**。
-AI 可能會產生幻覺或誤解法理。任何具體的法律行為、合約簽署或訴訟，請務必諮詢領有台灣執照的專業律師。
+本專案提供之內容僅供參考，**不構成任何形式的法律建議**。法律分析受個案事實影響極大，任何具體法律問題請務必諮詢領有台灣執照的專業律師。
