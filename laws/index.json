@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "laws": [
+    {
+      "id": "civil-code",
+      "pcode": "N0030001",
+      "name": "台灣民法",
+      "files": {
+        "markdown": "civil-code/articles.md",
+        "json": "civil-code/full.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+name: Daily Law Update
+
+on:
+  schedule:
+    # 每天 UTC 06:00 執行 (台灣時間 14:00)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  update-laws:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Fetch and update laws
+        run: python scripts/update_laws.py
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add laws/
+          git status --porcelain
+          echo "changed=$(if git status --porcelain | grep -q 'laws/'; then echo 'true'; else echo 'false'; fi)" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "chore(laws): auto-update Taiwan laws data [skip ci]"
+          git push
