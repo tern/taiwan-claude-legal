@@ -1,17 +1,19 @@
 ---
 name: taiwan-legal-audit
-description: Use when the user requests a contract review, legal audit, or risk assessment under Taiwan jurisdiction involving Civil Code, Company Act, or Labor Standards Act.
+description: Use when the user requests a contract review, legal audit, or risk assessment under Taiwan jurisdiction involving Civil Code, Company Act, Labor Standards Act, PDPA, or Copyright Act.
 ---
 
 # Skill: Taiwan Legal Audit
 
 ## Overview
-Provides a structured, high-fidelity legal audit of contracts and documents based on Taiwan laws (Civil Code, Company Act, Labor Standards Act) and local legal practices.
+Provides a structured, high-fidelity legal audit of contracts and documents based on Taiwan laws (Civil Code, Company Act, Labor Standards Act, PDPA, Copyright Act) and local legal practices.
 
 ## When to Use
-- Reviewing NDAs, Employment Contracts, Service Agreements, or Shareholder Agreements.
+- Reviewing NDAs, Employment Contracts, Service Agreements, Shareholder Agreements, or Privacy Policies.
 - Checking compliance with Labor Standards Act for employee-related clauses.
 - Checking Company Act compliance for corporate governance or share-related matters.
+- Checking PDPA compliance for personal data processing and privacy terms.
+- Checking Copyright Act for intellectual property ownership and licensing.
 - Assessing mandatory provisions (Art. 71) and liquidated damages (Art. 252) under Civil Code.
 
 ## Audit Workflow
@@ -25,8 +27,8 @@ digraph audit_flow {
     "Step 4: Output & Citations" -> "Step 5: Disclaimer";
 
     "Step 1: Context Loading" [label="Read relevant articles.md files"];
-    "Step 2: Type Identification" [label="Identify Contract Type (Employment, Corporate, etc.)"];
-    "Step 3: Multi-Law Risk Scan" [label="Check Civil Code, Company Act, or Labor laws"];
+    "Step 2: Type Identification" [label="Identify Contract Type (Employment, Privacy, IP, etc.)"];
+    "Step 3: Multi-Law Risk Scan" [label="Check Civil Code, Labor, PDPA, or Copyright laws"];
     "Step 4: Output & Citations" [label="Traditional Chinese + Article Citations"];
 }
 ```
@@ -36,13 +38,17 @@ digraph audit_flow {
 - **General Contracts**: `laws/civil-code/articles.md`
 - **Employment/Labor**: `laws/labor-standards-act/articles.md` (and Civil Code)
 - **Corporate/Shares**: `laws/company-act/articles.md` (and Civil Code)
+- **Privacy/Data**: `laws/pdpa/articles.md`
+- **IP/Licensing**: `laws/copyright-act/articles.md`
 
 ### 2. Multi-Law Risk Scan (Crucial)
 Specifically audit for the following:
 - **Civil Code Art. 71**: Violation of mandatory or prohibitive provisions.
 - **Civil Code Art. 252**: Disproportionate liquidated damages.
-- **Labor Standards Act**: Mandatory protection for employees (e.g., severance, working hours, termination notice).
-- **Company Act**: Procedures for share transfers, board resolutions, or shareholder rights.
+- **Labor Standards Act**: Mandatory protection for employees.
+- **Company Act**: Corporate governance and share transfer procedures.
+- **PDPA**: Legal basis for data collection, notice requirements, and rights of data subjects.
+- **Copyright Act**: Rules for work-for-hire (Art. 11, 12) and moral rights.
 
 ### 3. Output Requirements
 - **Language**: Strictly use Traditional Chinese (Taiwan).
@@ -53,6 +59,8 @@ Specifically audit for the following:
     - **民法 (Civil Code)**: `B0000001`
     - **公司法 (Company Act)**: `J0080001`
     - **勞動基準法 (Labor Standards Act)**: `N0030001`
+    - **個人資料保護法 (PDPA)**: `I0050021`
+    - **著作權法 (Copyright Act)**: `J0070017`
   - **Format**: `依據 [[法規名稱] 第 XX 條](URL)` (e.g., `依據 [民法第 71 條](https://law.moj.gov.tw/LawClass/LawSingle.aspx?pcode=B0000001&flno=71)`)
 - **Disclaimer**: Every response MUST end with:
   > *注意：以上分析僅供參考，不構成正式法律意見。實際法律行為請諮詢專業律師。*

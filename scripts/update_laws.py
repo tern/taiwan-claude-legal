@@ -13,7 +13,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 LAWS_TO_TRACK = [
     {"pcode": "B0000001", "name": "台灣民法", "dir": "civil-code"},
     {"pcode": "J0080001", "name": "台灣公司法", "dir": "company-act"},
-    {"pcode": "N0030001", "name": "台灣勞動基準法", "dir": "labor-standards-act"}
+    {"pcode": "N0030001", "name": "台灣勞動基準法", "dir": "labor-standards-act"},
+    {"pcode": "I0050021", "name": "個人資料保護法", "dir": "pdpa"},
+    {"pcode": "J0070017", "name": "著作權法", "dir": "copyright-act"}
 ]
 
 LAWS_ROOT_DIR = "laws"
