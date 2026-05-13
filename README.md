@@ -56,11 +56,19 @@ claude plugin install taiwan-legal-audit
 ```
 
 ### 3. Gemini CLI (終端機模式)
-如果您使用的是 Gemini CLI，請在專案目錄下執行：
+如果您使用的是 Gemini CLI，您可以將此技能安裝至您的全域環境或特定專案中：
 
+**安裝指令：**
 ```bash
-gemini activate-skill https://github.com/tern/taiwan-claude-legal
+# 全域安裝（推薦，任何專案皆可使用）
+gemini skills install https://github.com/tern/taiwan-claude-legal
+
+# 僅安裝於目前專案（workspace 模式）
+gemini skills install https://github.com/tern/taiwan-claude-legal --scope workspace
 ```
+
+**如何使用：**
+安裝完成後，您不需要手動啟動。只要在對話中詢問與台灣法律或合約審閱相關的問題（例如：「幫我審閱這份合約」），Gemini 就會根據任務需求**自動觸發**此技能。
 
 ---
 
