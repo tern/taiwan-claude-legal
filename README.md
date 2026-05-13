@@ -14,16 +14,11 @@
 
 請確保您已安裝 [Claude CLI](https://github.com/anthropics/claude-code)。
 
-1. **複製專案到本地**：
-   ```bash
-   git clone https://github.com/tern/taiwan-claude-legal.git
-   cd taiwan-claude-legal
-   ```
+您無需手動下載，直接在對話中輸入以下指令即可安裝：
 
-2. **將專案加入為 Claude 插件**：
-   ```bash
-   claude plugins add .
-   ```
+```bash
+claude plugins add https://github.com/tern/taiwan-claude-legal
+```
 
 ## 如何使用
 
@@ -32,6 +27,12 @@
 - **合約風險分析**：`@playbook taiwan-civil-code "請分析這份合約中關於違約金的條款是否合理？"`
 - **法規諮詢**：`"依據台灣民法，口頭合約是否有效？"`
 - **文件草擬**：`@playbook taiwan-civil-code "請幫我草擬一份符合台灣法律的簡易借貸協議。"`
+
+## 未來優化方向 (Roadmap)
+本專案目前專注於民法，未來計畫擴充以下功能：
+- **多法規支援**：預計加入《公司法》、《勞基法》、《個人資料保護法》等核心商務法規。
+- **原版技能整合**：計畫補上 `original-skills/` 目錄，將 Anthropic 原版 `claude-for-legal` 的通用法律能力與台灣本地法規完美結合。
+- **自動化更新**：目前已具備每日自動同步法務部最新條文的功能。
 
 ## 自動更新機制
 本專案透過 `.github/workflows/update-laws.yml` 進行排程更新：
