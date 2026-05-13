@@ -1,0 +1,21 @@
+{
+  "name": "taiwan-claude-legal",
+  "version": "1.0.0",
+  "description": "台灣版 Claude for Legal：支援台灣民法自動更新、合約審查與法律實務 Playbook。",
+  "author": "tern",
+  "license": "Apache-2.0",
+  "keywords": [
+    "claude-for-legal",
+    "taiwan-law",
+    "civil-code",
+    "legal-tech"
+  ],
+  "main": "scripts/update_laws.py",
+  "playbooks": [
+    "playbooks/taiwan-civil-code.md"
+  ],
+  "knowledge": [
+    "laws/civil-code/articles.md"
+  ],
+  "homepage": "https://github.com/tern/taiwan-claude-legal"
+}
