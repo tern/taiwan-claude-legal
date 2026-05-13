@@ -1,6 +1,6 @@
 # Taiwan Claude Legal 🇹🇼⚖️
 
-![Version](https://img.shields.io/badge/version-v1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
 > **來源說明**：
 > 1. 本專案基於 [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal) 架構進行台灣本地化擴充。
