@@ -1,13 +1,11 @@
 import os
 import json
 import time
+import warnings
 import requests
 import urllib3
 from datetime import datetime
 from bs4 import BeautifulSoup
-
-# 停用 SSL 警告
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # === 設定 ===
 LAWS_TO_TRACK = [
@@ -26,13 +24,23 @@ def fetch_law_html(pcode):
     headers = {"User-Agent": "Mozilla/5.0 (compatible; TaiwanClaudeLegalBot/1.0)"}
     for attempt in range(3):
         try:
-            # 加入 verify=False 以應對法務部網站憑證問題
-            r = requests.get(url, headers=headers, timeout=15, verify=False)
+            r = requests.get(url, headers=headers, timeout=15)
             r.raise_for_status()
             return r.text
+        except requests.exceptions.SSLError:
+            # 法務部網站偶發憑證鏈問題，降級為加密但不驗證模式
+            print(f"⚠️  {pcode} SSL 驗證失敗，以無驗證模式重試（連線仍加密）")
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", urllib3.exceptions.InsecureRequestWarning)
+                    r = requests.get(url, headers=headers, timeout=15, verify=False)
+                r.raise_for_status()
+                return r.text
+            except Exception as e:
+                print(f"Fetch failed for {pcode} (attempt {attempt+1}): {e}")
         except Exception as e:
             print(f"Fetch failed for {pcode} (attempt {attempt+1}): {e}")
-            time.sleep(2)
+        time.sleep(2)
     raise Exception(f"無法取得法規網頁: {pcode}")
 
 def parse_law_html(html):
