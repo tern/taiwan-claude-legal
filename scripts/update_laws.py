@@ -180,21 +180,23 @@ def main():
     if updated_laws:
         date_str = datetime.now().strftime("%Y-%m-%d")
         entry = f"- **{date_str}**：已自動更新法規：{', '.join(updated_laws)}\n"
-        
-        old_log = "# 更新日誌\n\n"
+
+        HEADER = "# 更新日誌\n\n"
+        body = ""
         if os.path.exists(CHANGELOG_FILE):
             with open(CHANGELOG_FILE, "r", encoding="utf-8") as f:
                 content = f.read()
-                if "# 更新日誌" in content:
-                    old_log = content
-                else:
-                    old_log += content
-
-        with open(CHANGELOG_FILE, "w", encoding="utf-8") as f:
-            if entry not in old_log:
-                f.write(old_log + entry)
+            # 剝離舊 header，只保留條目本體
+            for prefix in ("# 更新日誌 (Changelog)\n\n", "# 更新日誌\n\n"):
+                if content.startswith(prefix):
+                    body = content[len(prefix):]
+                    break
             else:
-                f.write(old_log)
+                body = content
+
+        if entry not in body:
+            with open(CHANGELOG_FILE, "w", encoding="utf-8") as f:
+                f.write(HEADER + entry + body)
 
 if __name__ == "__main__":
     main()
