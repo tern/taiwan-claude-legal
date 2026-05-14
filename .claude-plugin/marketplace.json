@@ -1,0 +1,17 @@
+{
+  "name": "taiwan-legal-marketplace",
+  "description": "台灣法律工具 plugin 集合，提供合約審查、法規比對與合規分析。",
+  "owner": {
+    "name": "tern"
+  },
+  "plugins": [
+    {
+      "name": "taiwan-claude-legal",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/tern/taiwan-claude-legal.git"
+      },
+      "description": "台灣版 Claude for Legal：支援民法、公司法、勞動基準法、個人資料保護法、著作權法自動更新與合約審查。"
+    }
+  ]
+}
