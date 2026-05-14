@@ -53,7 +53,23 @@ claude plugin install taiwan-claude-legal
 
 也可以直接在對話中描述需求，plugin 內建的 `taiwan-legal-audit` skill 會自動根據文件類型（勞動、公司、隱私、IP）載入對應法條並分析。
 
-### 2. Claude Code（本機測試）
+### 2. Claude Desktop（Cowork 桌面版）
+
+**方式一：透過 UI 安裝**
+1. 開啟 Claude Desktop，切換至 **Cowork** 標籤。
+2. 點擊左側 **Customize** > **Browse plugins**。
+3. 搜尋「taiwan-claude-legal」並點擊安裝。
+
+若搜尋不到，請先透過終端機加入 marketplace，再回到 UI 安裝：
+```bash
+claude plugin marketplace add tern/taiwan-claude-legal
+```
+
+**方式二：上傳 .zip 安裝**
+
+下載本專案的 zip（GitHub → Code → Download ZIP），在 **Browse plugins** 頁面選擇上傳檔案。
+
+### 3. Claude Code（本機測試）
 若想在不安裝的情況下直接試用，可透過 `--plugin-dir` 旗標載入：
 
 ```bash
