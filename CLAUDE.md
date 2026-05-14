@@ -1,7 +1,7 @@
 # Taiwan Claude Legal — 專案情境
 
 ## 專案用途
-提供台灣法律條文的自動更新與合約審查技能，支援 Gemini CLI（skill）與 Claude Code（plugin）。
+提供台灣法律條文的自動更新與合約審查技能，支援 Claude Code（plugin）與 Gemini CLI（skill）。
 
 ## 目錄結構
 
@@ -16,7 +16,9 @@ laws/
     full.json          # 機器可讀版
 
 skills/taiwan-legal-audit/SKILL.md   # 審查邏輯主檔
+commands/audit.md                    # /taiwan-claude-legal:audit 指令
 scripts/update_laws.py               # 法規爬蟲（Python）
+.claude-plugin/plugin.json           # Claude Code plugin 設定
 ```
 
 ## 法規更新
