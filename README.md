@@ -69,14 +69,6 @@ claude plugin marketplace add tern/taiwan-claude-legal
 
 下載本專案的 zip（GitHub → Code → Download ZIP），在 **Browse plugins** 頁面選擇上傳檔案。
 
-### 3. Claude Code（本機測試）
-若想在不安裝的情況下直接試用，可透過 `--plugin-dir` 旗標載入：
-
-```bash
-git clone https://github.com/tern/taiwan-claude-legal
-claude --plugin-dir ./taiwan-claude-legal
-```
-
 ### 3. Gemini CLI (終端機模式)
 如果您使用的是 Gemini CLI，您可以將此技能安裝至您的全域環境或特定專案中：
 
