@@ -45,6 +45,14 @@ claude plugin marketplace add tern/taiwan-claude-legal
 claude plugin install taiwan-claude-legal
 ```
 
+**安裝後可用的指令：**
+
+| 指令 | 說明 |
+|------|------|
+| `/taiwan-claude-legal:audit <合約文字>` | 快速觸發台灣法律風險審查 |
+
+也可以直接在對話中描述需求，plugin 內建的 `taiwan-legal-audit` skill 會自動根據文件類型（勞動、公司、隱私、IP）載入對應法條並分析。
+
 ### 2. Claude Code（本機測試）
 若想在不安裝的情況下直接試用，可透過 `--plugin-dir` 旗標載入：
 
