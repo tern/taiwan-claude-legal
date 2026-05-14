@@ -2,9 +2,11 @@
   "name": "taiwan-claude-legal",
   "version": "1.0.0",
   "description": "台灣版 Claude for Legal：支援台灣民法自動更新、合約審查與法律實務。",
-  "author": "tern",
-  "entryPoints": {
-    "commands": "./commands",
-    "skills": "./skills"
-  }
+  "author": {
+    "name": "tern",
+    "url": "https://github.com/tern"
+  },
+  "repository": "https://github.com/tern/taiwan-claude-legal",
+  "license": "MIT",
+  "skills": "./skills"
 }
