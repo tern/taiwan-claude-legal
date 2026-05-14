@@ -8,5 +8,6 @@
   },
   "repository": "https://github.com/tern/taiwan-claude-legal",
   "license": "MIT",
-  "skills": "./skills"
+  "skills": "./skills",
+  "commands": "./commands"
 }
