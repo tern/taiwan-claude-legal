@@ -41,3 +41,11 @@ python3 scripts/update_laws.py
 ## 審查邏輯
 
 詳見 `skills/taiwan-legal-audit/SKILL.md`，不在此重複。
+
+## Edit Tool 重試規則
+Edit 失敗（`old_string` 不匹配）時，**禁止直接重試**。必須：
+1. 用 **Read** 重新讀取目標檔案，取得最新內容。
+2. 從最新內容中找到正確的 `old_string`（含確切空白、縮排、換行）。
+3. 用新取得的內容重新執行 Edit。
+
+**禁止**使用記憶中的舊內容重試 — 檔案可能在上次讀取後已變動。
