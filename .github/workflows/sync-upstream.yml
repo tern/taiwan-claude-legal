@@ -1,9 +1,10 @@
 name: Sync Upstream
 
 on:
-  schedule:
-    # 每天 UTC 00:00 檢查一次上游更新
-    - cron: '0 0 * * *'
+  # 已關閉定時排程，如需自動執行請取消下方 schedule 的註解
+  # schedule:
+  #   # 每天 UTC 00:00 檢查一次上游更新
+  #   - cron: '0 0 * * *'
   workflow_dispatch: # 允許手動觸發
 
 jobs:
